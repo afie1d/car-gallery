@@ -1,37 +1,41 @@
 body {
-    /* background-color: #f9f9f9; */
-    font-family: Arial, sans-serif;
-    background: linear-gradient(to right, #915f30bd, rgba(150, 150, 150, 0.819));
+    background-color: #f8f9fa;
 }
 
-#car {
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px black;
-    padding: 30px;
+.container {
+    margin-top: 50px;
 }
 
-#car-img {
-    border-radius: 10px;
-    box-shadow: 0 2px 4px black;
+h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
 }
 
-#car-list {
-    max-height: 400px;
-    overflow-y: auto;
-    border: 1px solid black;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px white;
+#results {
+    margin-top: 30px;
 }
 
-#car-list li {
+.car-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #343a40;
+}
+
+.review-text {
+    font-size: 1rem;
+    color: #6c757d;
+}
+
+.result-item {
+    padding: 20px;
     background-color: #ffffff;
-    border-bottom: 1px solid #ddd;
-    padding: 10px 15px;
-    transition: background-color 0.3s ease;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
 
-#car-list li:hover {
-    background-color: brown;
+.search-box {
+    margin: 0 auto;
+    max-width: 600px;
 }
-

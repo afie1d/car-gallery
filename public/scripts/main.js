@@ -1,92 +1,36 @@
-const IMG_PATH = "images/";
+function searchReviews() {
+    const keywords = document.getElementById('searchInput').value;
 
-class Car {
-    constructor(name, imgSrc) {
-        this.clickCount = 0;
-        this.name = name; 
-        this.imgSrc = IMG_PATH + imgSrc;
-    }
+    fetch('/search', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ keywords: keywords }),
+    })
+    .then(response => response.json())
+    .then(data => displayResults(data))
+    .catch(error => console.error('Error:', error));
 }
 
-const carModel = {
-    currentCar: null, 
-    cars: [
-        new Car('Maserati Gran Tourismo', 'black-convertible-coupe.jpeg'),
-        new Car('Camaro SS 1LE', 'chevrolet-camaro.jpeg'),
-        new Car('Dodge Charger 1970', 'dodge-charger.jpeg'),
-        new Car('Ford Mustang 1966', 'ford-mustang.jpeg'),
-        new Car('190 SL Roadster', 'mercedes-benz.jpeg')
-    ]
-};
+function displayResults(data) {
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = ''; // Clear previous results
 
-const carController = {
-    init() {
-        carModel.currentCar = carModel.cars[0];
-        carListView.init();
-        carView.init();
-    },
-    getCurrentCar() {
-        return carModel.currentCar;
-    },
-    getCars() {
-        return carModel.cars;
-    },
-    setCurrentCar(car) {
-        carModel.currentCar = car;
-    },
-    incrementCounter() {
-        carModel.currentCar.clickCount++;
-        console.log(carModel.currentCar.clickCount);
-        carView.render();
-    }
-};
+    data.forEach(item => {
+        const resultItem = document.createElement('div');
+        resultItem.classList.add('result-item');
 
-const carView = {
-    init() {
-        this.carElem = document.getElementById('car');
-        this.carNameElem = document.getElementById('car-name');
-        this.carImageElem = document.getElementById('car-img');
-        this.countElem = document.getElementById('car-count');
-        this.carImageElem.addEventListener('click', this.clickHandler);
-        this.render();
-    },
-    clickHandler() {
-        return carController.incrementCounter();
-    },
-    render() {
-        const currentCar = carController.getCurrentCar();
-        this.countElem.textContent = currentCar.clickCount;
-        this.carNameElem.textContent = currentCar.name;
-        this.carImageElem.src = currentCar.imgSrc;
-        this.carImageElem.style.cursor = 'pointer';
-    }
-};
+        const carName = document.createElement('div');
+        carName.classList.add('car-name');
+        carName.innerText = item.name;
 
-const carListView = {
-    init() {
-        this.carListElem = document.getElementById('car-list');
-        this.render();
-    },
-    render() {
-        let car, elem;
-        const cars = carController.getCars();
-        this.carListElem.innerHTML = '';
-        for(let i = 0; i < cars.length; i++) {
-            car = cars[i];
-            elem = document.createElement('li');
-            elem.className = 'list-group-item d-flex justify-content-between lh-condensed';
-            elem.style.cursor = 'pointer';
-            elem.textContent = car.name;
-            elem.addEventListener('click', (function(carCopy) {
-                return function() {
-                    carController.setCurrentCar(carCopy);
-                    carView.render();
-                }
-            })(car));
-            this.carListElem.appendChild(elem);
-        }
-    }
-};
+        const reviewText = document.createElement('div');
+        reviewText.classList.add('review-text');
+        reviewText.innerText = item.review;
 
-
-carController.init();
+        resultItem.appendChild(carName);
+        resultItem.appendChild(reviewText);
+        resultsDiv.appendChild(resultItem);
+    });
+}
